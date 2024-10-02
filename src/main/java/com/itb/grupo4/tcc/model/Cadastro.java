@@ -11,33 +11,28 @@ public class Cadastro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 45)
     private String nome;
 
-    @Column(nullable = false)
-    private String sexo;
+    @Column(nullable = false, length = 1) // Modificado para 'M' ou 'F'
+    private String sexo; // 'M' ou 'F'
 
-    @Column(name = "data_nasci", nullable = false) // Atualizado para o novo nome
-    private Date data_nasci; // Nome do atributo atualizado
+    @Column(name = "data_nasci", nullable = false)
+    private Date data_nasci;
 
-    @Column(nullable = false)
-    private int idade;
-
+    @Column(length = 11) // CPF com 11 dígitos
     private String cpf;
-    private String telefone;
-    private String logradouro;
-    private String cep;
-    private String bairro;
-    private String cidade;
-    private String uf;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
+    private String telefone;
+
+    @Column(nullable = false, length = 50)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String senha;
 
-    @Column(nullable = false)
+    @Column(name = "cod_status", nullable = false)
     private boolean codStatus;
 
     // Atributos de apoio
@@ -72,23 +67,19 @@ public class Cadastro {
     }
 
     public void setSexo(String sexo) {
-        this.sexo = sexo;
+        if ("M".equalsIgnoreCase(sexo) || "F".equalsIgnoreCase(sexo)) {
+            this.sexo = sexo;
+        } else {
+            this.sexo = "I"; // I para inválido, se necessário
+        }
     }
 
-    public Date getData_nasci() { // Método getter atualizado
+    public Date getData_nasci() {
         return data_nasci;
     }
 
-    public void setData_nasci(Date data_nasci) { // Método setter atualizado
+    public void setData_nasci(Date data_nasci) {
         this.data_nasci = data_nasci;
-    }
-
-    public int getIdade() {
-        return idade;
-    }
-
-    public void setIdade(int idade) {
-        this.idade = idade;
     }
 
     public String getCpf() {
@@ -105,46 +96,6 @@ public class Cadastro {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public String getLogradouro() {
-        return logradouro;
-    }
-
-    public void setLogradouro(String logradouro) {
-        this.logradouro = logradouro;
-    }
-
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    public String getBairro() {
-        return bairro;
-    }
-
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public String getUf() {
-        return uf;
-    }
-
-    public void setUf(String uf) {
-        this.uf = uf;
     }
 
     public String getEmail() {
@@ -188,6 +139,10 @@ public class Cadastro {
         if (nome == null || nome.isEmpty()) {
             isValid = false;
             mensagemErro = "Nome é obrigatório.";
+        }
+        if (!"M".equalsIgnoreCase(sexo) && !"F".equalsIgnoreCase(sexo)) {
+            isValid = false;
+            mensagemErro = "Sexo deve ser 'M' ou 'F'.";
         }
         // Adicione outras validações conforme necessário
         return isValid;
